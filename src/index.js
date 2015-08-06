@@ -4,7 +4,7 @@
 
 
 var Tree = function (caseSensitive) {
-    this.root = null;
+    this.root = undefined;
     this.caseSensitive = Boolean(caseSensitive);
 }
 
@@ -13,7 +13,7 @@ Tree.prototype.add = function (str, data) {
         throw new Error("Add only accepts strings.");
     }
 
-    if (this.root === null){
+    if (this.root === undefined){
         this.root = this.createNode(str[0]);
     }
     this.innerAdd(str, 0, this.root, data);
@@ -48,17 +48,17 @@ Tree.prototype.innerAdd = function (str, pos, node, data) {
 };
 
 Tree.prototype.setLeft = function(node, ch){
-    if (node.left===null) { node.left = this.createNode(ch); }
+    if (node.left===undefined) { node.left = this.createNode(ch); }
     return node.left;
 };
 
 Tree.prototype.setRight = function(node, ch){
-    if (node.right===null) { node.right = this.createNode(ch); }
+    if (node.right===undefined) { node.right = this.createNode(ch); }
     return node.right;
 };
 
 Tree.prototype.setCenter = function(node, ch){
-    if (node.center===null) { node.center = this.createNode(ch); }
+    if (node.center===undefined) { node.center = this.createNode(ch); }
     return node.center;
 };
 
@@ -68,15 +68,15 @@ Tree.prototype.search = function(str) {
         throw new Error("Type string required for search.");
     }
 
-    if (this.root === null) {
-        throw new Error("Tree not initiliazed, root is null. Call add before searching.");
+    if (this.root === undefined) {
+        throw new Error("Tree not initiliazed, root is undefined. Call add before searching.");
     }
 
     var endNodes = [];
     var collection = this.collectEndNodes.bind(this);
     this.traverse(this.root, str, 0, function(node, str, pos){
         if(pos === str.length){
-            if (node!==null){
+            if (node!==undefined){
                 collection(node, endNodes);
             }
         }
@@ -85,7 +85,7 @@ Tree.prototype.search = function(str) {
 }
 
 Tree.prototype.traverse = function(node, str, pos, fn){
-    while(node !== null) {
+    while(node !== undefined) {
         var currentChar = str[pos];
         if (!this.caseSensitive && currentChar!==undefined){
             currentChar = currentChar.toLowerCase();
@@ -104,10 +104,10 @@ Tree.prototype.traverse = function(node, str, pos, fn){
 };
 
 Tree.prototype.collectEndNodes = function(node, endNodes){
-    if (endNodes === undefined || endNodes === null){
+    if (endNodes === undefined){
         endNodes = [];
     }
-    if(node !== null && node !== undefined) {
+    if(node !== undefined) {
         if (node.isEnd){
             endNodes.push(node);
         }
@@ -127,9 +127,6 @@ Tree.prototype.createNode = function(ch){
 var TreeNode = function (ch) {
     this.ch = ch;
     this.isEnd = false;
-    this.left = null;
-    this.center = null;
-    this.right = null;
 };
 
 //node
