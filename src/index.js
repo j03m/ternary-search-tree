@@ -3,14 +3,16 @@
  * */
 
 
-var Tree = function () {
+var Tree = function (caseSensitive) {
     this.root = null;
+    this.caseSensitive = Boolean(caseSensitive);
 }
 
 Tree.prototype.add = function (str, data) {
     if (typeof str !== "string") {
         throw new Error("Add only accepts strings.");
     }
+
     if (this.root === null){
         this.root = this.createNode(str[0]);
     }
@@ -18,18 +20,29 @@ Tree.prototype.add = function (str, data) {
 };
 
 Tree.prototype.innerAdd = function (str, pos, node, data) {
+    var compare = str[pos];
+    var compareNext = str[pos + 1];
 
-    if (str[pos] < node.ch) {
-        node = this.setLeft(node, str[pos]);
+    if (!this.caseSensitive){
+        compare = compare.toLowerCase();
+        if (compareNext!==undefined){
+            compareNext = compareNext.toLowerCase();
+        }
+    }
+    if (compare < node.ch) {
+        node = this.setLeft(node, compare);
         this.innerAdd(str, pos, node, data);
-    } else if (str[pos] > node.ch) {
-        node = this.setRight(node, str[pos]);
+    } else if (compare > node.ch) {
+        node = this.setRight(node, compare);
         this.innerAdd(str, pos, node, data);
-    } else if (str[pos + 1] === undefined) {
+    } else if (compareNext === undefined) {
         node.isEnd = true;
-        node.data = data;
+        if (node.data === undefined){
+            node.data = [];
+        }
+        node.data.push(data);
     } else {
-        node = this.setCenter(node, str[pos+1]);
+        node = this.setCenter(node, compareNext);
         this.innerAdd(str, pos+1, node, data);
     }
 };
@@ -74,6 +87,9 @@ Tree.prototype.search = function(str) {
 Tree.prototype.traverse = function(node, str, pos, fn){
     while(node !== null) {
         var currentChar = str[pos];
+        if (!this.caseSensitive && currentChar!==undefined){
+            currentChar = currentChar.toLowerCase();
+        }
         if (currentChar < node.ch){
             node = node.left;
         }else if (currentChar > node.ch){
@@ -102,6 +118,9 @@ Tree.prototype.collectEndNodes = function(node, endNodes){
 };
 
 Tree.prototype.createNode = function(ch){
+    if (!this.caseSensitive){
+        ch = ch.toLowerCase();
+    }
     return new TreeNode(ch);
 };
 

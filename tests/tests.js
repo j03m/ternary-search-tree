@@ -50,10 +50,10 @@ describe("add function", function () {
         assert(tree.root.data === undefined);
         assert(tree.root.center.data === undefined);
         assert(tree.root.center.center.data === undefined);
-        assert(tree.root.center.center.center.data === 1);
+        assert(tree.root.center.center.center.data[0] === 1);
         assert(tree.root.center.right.data === undefined);
         assert(tree.root.center.right.center.data === undefined);
-        assert(tree.root.center.right.center.center.data === 2);
+        assert(tree.root.center.right.center.center.data[0] === 2);
 
     });
 
@@ -77,11 +77,11 @@ describe("add function", function () {
         tree.add("ACCA", 2);
         var result = tree.search("AB");
         assert(result.length === 1);
-        assert(result[0].data === 1);
+        assert(result[0].data[0] === 1);
 
         var result = tree.search("AC");
         assert(result.length === 1);
-        assert(result[0].data === 2);
+        assert(result[0].data[0] === 2);
 
     });
 
@@ -94,6 +94,37 @@ describe("add function", function () {
 
         var result = tree.search("ZA");
         assert(result.length === 0);
+
+    });
+
+    it("should be case sensitive only if supply a bool true to the constructor", function () {
+        var tree = new Tree(true);
+        tree.add("ABBA", 1);
+        tree.add("abba", 2);
+        tree.add("ACCA", 3);
+
+        var result = tree.search("ab");
+        assert(result.length === 1);
+        assert(result[0].data.length === 1);
+        assert(result[0].data[0] === 2);
+
+        var result = tree.search("ac");
+        assert(result.length === 0);
+
+        var tree2 = new Tree();
+        tree2.add("ABBA", 1);
+        tree2.add("abba", 2);
+        tree2.add("ACCA", 3);
+
+        result = tree2.search("ab");
+        assert(result.length === 1);
+
+        assert(result[0].data.length === 2);
+        assert(result[0].data[0] === 1);
+        assert(result[0].data[1] === 2);
+
+        var result = tree2.search("ac");
+        assert(result.length === 1);
 
     });
 
@@ -131,6 +162,6 @@ describe("add function", function () {
 
         var result = tree.search("Enter");
         assert(result.length === 1);
-        assert(result[0].data === 3);
+        assert(result[0].data[0] === 3);
     });
 });
