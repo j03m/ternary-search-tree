@@ -14,7 +14,7 @@ fs.readFile("../will.json", function(err, data){
     for(var i=0;i<obj.length;i++){
         process.stdout.write(".");
         if (typeof obj[i].text_entry === "string"){
-            tree.add(obj[i].text_entry, {name:obj[i].play_name, id:obj[i].line_id});
+            tree.add(obj[i].text_entry, {name:obj[i].play_name, id:obj[i].line_id, val:obj[i].text_entry});
         }else{
             throw new Error(typeof obj[i].text_entry);
         }
@@ -32,4 +32,9 @@ fs.readFile("../will.json", function(err, data){
 
     console.log("found: ", nodes, "\nin:", end-start, "ms. Incremental heap:", heapTotalEnd - heapTotalStart);
 
+    start = Date.now();
+    nodes = tree.search("But so ");
+    end = Date.now();
+
+    console.log("2nd search found: ", nodes, "\nin:", end-start, "ms. Incremental heap:", heapTotalEnd - heapTotalStart);
 });
