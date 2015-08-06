@@ -1,6 +1,6 @@
 # Ternary prefix search tree
 
-Inspired by the c# implementation here: Inspired by: http://igoro.com/archive/efficient-auto-complete-with-a-ternary-search-tree/
+Inspired by the c# implementation here: http://igoro.com/archive/efficient-auto-complete-with-a-ternary-search-tree/
 
 Pure javascript implementation that allows for loading strings into the tree and then quickly searching out a given prefix. 
 
