@@ -85,6 +85,18 @@ describe("add function", function () {
 
     });
 
+    it("should not find nodes where there are no nodes to be found", function () {
+        var tree = new Tree();
+        tree.add("ABBA", 1);
+        tree.add("ACCA", 2);
+        var result = tree.search("CX");
+        assert(result.length === 0);;
+
+        var result = tree.search("ZA");
+        assert(result.length === 0);
+
+    });
+
     it("should handle long strings and punctuation", function () {
         var obj = [{
             line_id: 1,
