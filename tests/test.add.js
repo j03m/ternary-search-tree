@@ -1,8 +1,8 @@
 var Tree = require("../src/index.js");
 var assert = require("assert");
-describe("add function", function(){
+describe("add function", function () {
 
-    it("should create a properly formed tree when strings are added", function(){
+    it("should create a properly formed tree when strings are added", function () {
         var tree = new Tree();
         tree.add("ABBA");
         assert(tree.root.ch === "A");
@@ -26,7 +26,7 @@ describe("add function", function(){
 
     });
 
-    it("should branch to other trees when non matching strings are added", function(){
+    it("should branch to other trees when non matching strings are added", function () {
         var tree = new Tree();
         tree.add("ABBA");
         tree.add("ACCA");
@@ -43,7 +43,7 @@ describe("add function", function(){
 
     });
 
-    it("should apply a data package to end nodes when data is supplied", function(){
+    it("should apply a data package to end nodes when data is supplied", function () {
         var tree = new Tree();
         tree.add("ABBA", 1);
         tree.add("ACCA", 2);
@@ -57,7 +57,7 @@ describe("add function", function(){
 
     });
 
-    it("should set isEnd for end nodes", function(){
+    it("should set isEnd for end nodes", function () {
         var tree = new Tree();
         tree.add("ABBA", 1);
         tree.add("ACCA", 2);
@@ -71,4 +71,54 @@ describe("add function", function(){
 
     });
 
+    it("should search out strings and return a list of end nodes with data for matches", function () {
+        var tree = new Tree();
+        tree.add("ABBA", 1);
+        tree.add("ACCA", 2);
+        var result = tree.search("AB");
+        assert(result.length === 1);
+        assert(result[0].data === 1);
+
+        var result = tree.search("AC");
+        assert(result.length === 1);
+        assert(result[0].data === 2);
+
+    });
+
+    it("should handle long strings and punctuation", function () {
+        var obj = [{
+            line_id: 1,
+            line_number: '',
+            play_name: 'Henry IV',
+            speaker: '',
+            speech_number: '',
+            text_entry: 'ACT I'
+        },
+            {
+                line_id: 2,
+                line_number: '',
+                play_name: 'Henry IV',
+                speaker: '',
+                speech_number: '',
+                text_entry: 'SCENE I. London. The palace.'
+            },
+            {
+                line_id: 3,
+                line_number: '',
+                play_name: 'Henry IV',
+                speaker: '',
+                speech_number: '',
+                text_entry: 'Enter KING HENRY, LORD JOHN OF LANCASTER, the EARL of WESTMORELAND, SIR WALTER BLUNT, and others'
+            }
+        ];
+
+        var tree = new Tree();
+        for (var i = 0; i < obj.length; i++) {
+            tree.add(obj[i].text_entry, obj[i].line_id);
+        }
+
+        var result = tree.search("Enter");
+        assert(result.length === 1);
+        assert(result[0].data === 3);
+    });
 });
