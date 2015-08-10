@@ -5,24 +5,24 @@ describe("add function", function () {
     it("should create a properly formed tree when strings are added", function () {
         var tree = new Tree();
         tree.add("ABBA");
-        assert(tree.root.ch === "A");
-        assert(tree.root.left === null);
-        assert(tree.root.right === null);
-        assert(tree.root.center !== null);
-        assert(tree.root.center.ch === "B");
+        assert(tree.root.ch === "a");
+        assert(tree.root.left === undefined);
+        assert(tree.root.right === undefined);
+        assert(tree.root.center !== undefined);
+        assert(tree.root.center.ch === "b");
 
         var node = tree.root.center;
-        assert(node.left === null);
-        assert(node.right === null);
-        assert(node.center !== null);
-        assert(node.center.ch === "B");
+        assert(node.left === undefined);
+        assert(node.right === undefined);
+        assert(node.center !== undefined);
+        assert(node.center.ch === "b");
 
         node = node.center;
-        assert(node.center !== null);
-        assert(node.center.ch === "A");
+        assert(node.center !== undefined);
+        assert(node.center.ch === "a");
         assert(node.center.isEnd === true);
-        assert(node.left === null);
-        assert(node.right === null);
+        assert(node.left === undefined);
+        assert(node.right === undefined);
 
     });
 
@@ -30,16 +30,16 @@ describe("add function", function () {
         var tree = new Tree();
         tree.add("ABBA");
         tree.add("ACCA");
-        assert(tree.root.ch === "A");
-        assert(tree.root.left === null);
-        assert(tree.root.right === null);
+        assert(tree.root.ch === "a");
+        assert(tree.root.left === undefined);
+        assert(tree.root.right === undefined);
         assert(tree.root.center !== undefined);
-        assert(tree.root.center.ch === "B");
-        assert(tree.root.center.center.ch === "B");
-        assert(tree.root.center.center.center.ch === "A");
-        assert(tree.root.center.right.ch === "C");
-        assert(tree.root.center.right.center.ch === "C");
-        assert(tree.root.center.right.center.center.ch === "A");
+        assert(tree.root.center.ch === "b");
+        assert(tree.root.center.center.ch === "b");
+        assert(tree.root.center.center.center.ch === "a");
+        assert(tree.root.center.right.ch === "c");
+        assert(tree.root.center.right.center.ch === "c");
+        assert(tree.root.center.right.center.center.ch === "a");
 
     });
 
@@ -125,6 +125,33 @@ describe("add function", function () {
 
         var result = tree2.search("ac");
         assert(result.length === 1);
+
+    });
+
+
+    it("should only collect final nodes that pass a supplied matching function when one is supplied", function () {
+        var tree = new Tree(false);
+        tree.add("ABBA", 1);
+        tree.add("abba", 2);
+        tree.add("ACCA", 3);
+        tree.add("DCCA", 20);
+        tree.add("DCCB", 11);
+        tree.add("DCCC", 22);
+
+        var result = tree.search("ab", function(data){
+            return data > 14;
+        });
+        assert(result.length === 0);
+
+        result = tree.search("ab");
+        assert(result[0].data.length === 2);
+
+        result = tree.search("D", function(data){
+            return data > 15;
+        });
+        assert(result.length === 2);
+        assert(result[0].data[0] === 20);
+        assert(result[1].data[0] === 22);
 
     });
 

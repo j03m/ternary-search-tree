@@ -23,6 +23,39 @@ bench.js will load the entire works of Shakespear (will.json), index it into the
 gulp test
 ```
 
+## Usage:
+
+Construct:
+```javascript
+ var tree = new Tree(); //case insensitive
+ var tree = new Tree(true); //case sensitive
+```
+
+Add:
+```
+    tree.add("Some string", {some:data});    
+```
+
+Search:
+```
+    tree.search("So"); //return all end nodes that match the prefix "so" (or "So" if case sensitive)
+    tree.search("So", function(data) { return data.prop < 5}); //return all end nodes that match prefix "so" and also have data.prop < 5
+```
+
+Traverse:
+```
+    //traverse a path through the tree, executing an action for each node
+    tree.traverse(tree.root, "So forth", 0, function(node, str, pos){
+                                                console.log("node is:", node, " is on path of: ", str, " at: ", pos, " of );
+                                            });
+```
+
+Collect End Nodes:
+```
+    //given a node, collect all end nodes from this node down, optionally providing a matcher function
+    tree.collectEndNodes(node, function(data) { return data.prop < 5 });
+```
+
 ## API Sample:
 
 ```javascript

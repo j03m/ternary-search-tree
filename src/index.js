@@ -63,7 +63,7 @@ Tree.prototype.setCenter = function(node, ch){
 };
 
 
-Tree.prototype.search = function(str) {
+Tree.prototype.search = function(str, matcher) {
     if (typeof str !== "string") {
         throw new Error("Type string required for search.");
     }
@@ -73,11 +73,11 @@ Tree.prototype.search = function(str) {
     }
 
     var endNodes = [];
-    var collection = this.collectEndNodes.bind(this);
+    var that = this;
     this.traverse(this.root, str, 0, function(node, str, pos){
         if(pos === str.length){
             if (node!==undefined){
-                collection(node, endNodes);
+                that.collectEndNodes(node, endNodes, matcher);
             }
         }
     });
@@ -103,17 +103,21 @@ Tree.prototype.traverse = function(node, str, pos, fn){
     }
 };
 
-Tree.prototype.collectEndNodes = function(node, endNodes){
+Tree.prototype.collectEndNodes = function(node, endNodes, matcher){
     if (endNodes === undefined){
         endNodes = [];
     }
     if(node !== undefined) {
         if (node.isEnd){
-            endNodes.push(node);
+            if (matcher === undefined){
+                endNodes.push(node);
+            }else if (matcher(node.data)){
+                endNodes.push(node);
+            }
         }
-        this.collectEndNodes(node.left, endNodes);
-        this.collectEndNodes(node.right, endNodes);
-        this.collectEndNodes(node.center, endNodes);
+        this.collectEndNodes(node.left, endNodes, matcher);
+        this.collectEndNodes(node.right, endNodes, matcher);
+        this.collectEndNodes(node.center, endNodes, matcher);
     }
 };
 
