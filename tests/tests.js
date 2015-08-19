@@ -155,6 +155,23 @@ describe("add function", function () {
 
     });
 
+    it("should hanlde a full match", function(){
+        var tree = new Tree(false);
+        tree.add("ABBA", 1);
+        var nodes = tree.search("ABBA");
+        assert(nodes.length === 1);
+    });
+
+    it("should update data references on multiple nodes", function(){
+        var tree = new Tree(false);
+        tree.add("ABBA", {found:1});
+        tree.add("ABBA", {found:2});
+        tree.add("ABBA", {found:3});
+        var nodes = tree.search("ABBA");
+        assert(nodes.length ===1 );
+        assert(nodes[0].data.length === 3);
+    });
+
     it("should handle long strings and punctuation", function () {
         var obj = [{
             line_id: 1,

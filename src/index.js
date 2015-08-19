@@ -74,10 +74,12 @@ Tree.prototype.search = function(str, matcher) {
 
     var endNodes = [];
     var that = this;
-    this.traverse(this.root, str, 0, function(node, str, pos){
+    this.traverse(this.root, str, 0, function(node, str, pos, parent){
         if(pos === str.length){
             if (node!==undefined){
                 that.collectEndNodes(node, endNodes, matcher);
+            }else{
+                that.collectEndNodes(parent, endNodes, matcher); //exact matches require access to 1 level up
             }
         }
     });
@@ -87,6 +89,7 @@ Tree.prototype.search = function(str, matcher) {
 Tree.prototype.traverse = function(node, str, pos, fn){
     while(node !== undefined) {
         var currentChar = str[pos];
+        var currentNode = node;
         if (!this.caseSensitive && currentChar!==undefined){
             currentChar = currentChar.toLowerCase();
         }
@@ -99,7 +102,7 @@ Tree.prototype.traverse = function(node, str, pos, fn){
             pos++;
         }
 
-        fn(node, str, pos);
+        fn(node, str, pos, currentNode);
     }
 };
 
