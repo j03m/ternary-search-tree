@@ -172,6 +172,17 @@ describe("add function", function () {
         assert(nodes[0].data.length === 3);
     });
 
+    it("should have the word stored in end nodes", function(){
+        var tree = new Tree(false);
+        tree.add("ABBA", {found:1});
+        tree.add("ABBC", {found:2});
+        tree.add("ACBA", {found:3});
+        var nodes = tree.search("AB");
+        assert(nodes.length ===2 );
+        assert(nodes[0].word === "ABBA");
+        assert(nodes[1].word === "ABBC");
+    });
+
     it("should handle long strings and punctuation", function () {
         var obj = [{
             line_id: 1,

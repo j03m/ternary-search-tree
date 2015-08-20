@@ -41,6 +41,7 @@ Tree.prototype.innerAdd = function (str, pos, node, data) {
             node.data = [];
         }
         node.data.push(data);
+        node.word = str;
     } else {
         node = this.setCenter(node, compareNext);
         this.innerAdd(str, pos+1, node, data);
